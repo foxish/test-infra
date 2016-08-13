@@ -28,6 +28,7 @@ spec:
         - python
         - /poller.py
         - "gs://kubernetes-test-history/sq-test/history.txt"
+        - "http://kubernetes.submit-queue.k8s.io"
         - '/creds/service-account.json'
         volumeMounts:
         - name: service-account

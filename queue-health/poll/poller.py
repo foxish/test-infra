@@ -24,9 +24,9 @@ import traceback
 import requests
 from pprint import pprint
 
-def get_submit_queue_json(path):
+def get_submit_queue_json(submit_queue, path):
     for n in range(3):
-        uri = 'http://submit-queue.k8s.io/%s' % path
+        uri = '%s/%s' % (submit_queue, path)
         print >>sys.stderr, 'GET %s' % uri
         resp = requests.get(uri)
         if resp.ok:
@@ -36,20 +36,20 @@ def get_submit_queue_json(path):
     return resp.json()
 
 
-def is_blocked():
-    ci = get_submit_queue_json('health')
+def is_blocked(submit_queue):
+    ci = get_submit_queue_json(submit_queue, 'health')
     return ci['MergePossibleNow'] != True
 
 
-def get_stats():
-    stats = get_submit_queue_json('sq-stats')
+def get_stats(submit_queue):
+    stats = get_submit_queue_json(submit_queue, 'sq-stats')
     return stats['Initialized'] == True, stats['MergesSinceRestart']
 
 
-def poll():
-    prs = get_submit_queue_json('prs')
-    e2e = get_submit_queue_json('github-e2e-queue')
-    online, merge_count = get_stats()
+def poll(submit_queue):
+    prs = get_submit_queue_json(submit_queue, 'prs')
+    e2e = get_submit_queue_json(submit_queue, 'github-e2e-queue')
+    online, merge_count = get_stats(submit_queue)
     return (
         online,  # Is mergebot initialized?
         len(prs['PRStatus']),  # number of open PRs
@@ -82,7 +82,10 @@ def save_stats(uri, buf):
       print >>sys.stderr, 'Failed to copy stats to %s: %d' % (uri, code)
 
 
-def poll_forever(uri, service_account=None):
+def poll_forever(uri, submit_queue, service_account=None):
+    if submit_queue == "":
+      print >>sys.stderr, 'Required submit-queue instance URL not provided'
+      return
     if service_account:
       print >>sys.stderr, 'Activating service account using: %s' % service_account
       subprocess.check_call(
@@ -100,7 +103,7 @@ def poll_forever(uri, service_account=None):
             print >>sys.stderr, 'Polling current status...'
             online, prs, queue, running, blocked, merge_count = False, 0, 0, 0, False, 0
             try:
-                online, prs, queue, running, blocked, merge_count = poll()
+                online, prs, queue, running, blocked, merge_count = poll(submit_queue)
             except KeyboardInterrupt:
                 raise
             except (KeyError, IOError):
