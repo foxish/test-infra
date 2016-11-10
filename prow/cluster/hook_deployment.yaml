@@ -19,23 +19,16 @@ metadata:
   labels:
     app: hook
 spec:
-  replicas: 4
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+  replicas: 2
   template:
     metadata:
       labels:
         app: hook
     spec:
-      nodeSelector:
-        role: ciongke
       terminationGracePeriodSeconds: 30
       containers:
       - name: hook
-        image: gcr.io/kubernetes-jenkins-pull/hook:0.47
+        image: foxish/hook:0.47
         imagePullPolicy: Always
         env:
         - name: LINE_IMAGE

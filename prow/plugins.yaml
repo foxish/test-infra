@@ -22,3 +22,7 @@ kubernetes/test-infra:
 - close
 - lgtm
 - trigger
+
+test-foxish/test:
+- lgtm
+- cla

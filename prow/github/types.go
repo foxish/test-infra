@@ -118,3 +118,15 @@ type IssueComment struct {
 	User    User   `json:"user,omitempty"`
 	HTMLURL string `json:"html_url,omitempty"`
 }
+
+type StatusEvent struct {
+	SHA         *string `json:"sha,omitempty"`
+	State       *string `json:"state,omitempty"`
+	Description *string `json:"description,omitempty"`
+	TargetURL   *string `json:"target_url,omitempty"`
+	ID          *int    `json:"id,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Context     *string `json:"context,omitempty"`
+	Sender      *User   `json:"sender,omitempty"`
+	Repo        *Repo   `json:"repository,omitempty"`
+}

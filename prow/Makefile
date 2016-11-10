@@ -19,7 +19,7 @@ DECK_VERSION   = 0.4
 
 # These are the usual GKE variables.
 PROJECT = kubernetes-jenkins-pull
-ZONE = us-central1-f
+ZONE = us-central1-b
 
 # These are GitHub credentials in files on your own machine.
 # The hook secret is your HMAC token, the OAuth secret is the OAuth
@@ -102,8 +102,8 @@ test:
 
 hook-image:
 	CGO_ENABLED=0 go build -o cmd/hook/hook k8s.io/test-infra/prow/cmd/hook
-	docker build -t "gcr.io/$(PROJECT)/hook:$(HOOK_VERSION)" cmd/hook
-	gcloud docker -- push "gcr.io/$(PROJECT)/hook:$(HOOK_VERSION)"
+	docker build -no-cache -t "foxish/hook:$(HOOK_VERSION)" cmd/hook
+	docker push "foxish/hook:$(HOOK_VERSION)"
 
 hook-deployment:
 	kubectl apply -f cluster/hook_deployment.yaml
