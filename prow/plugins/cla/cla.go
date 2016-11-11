@@ -40,6 +40,23 @@ func handleStatusEvent(pa *plugins.PluginAgent, se github.StatusEvent) error {
 }
 
 func handle(gc gitHubClient, se github.StatusEvent) error {
-	fmt.Println("HANDLING STATUSEVENT %+v", se)
+	fmt.Printf("HANDLING STATUSEVENT %+v", se)
+
+	// Use the search API to find the linked PRs
+
+
+
+	// Go through each returned PR if the label state is likely to change
+
+
+
+	// Is pr.HEAD.SHa = returnedSHA? Then set label.
+
+
+
+	// If it goes from yes -> no, post comment.
+	// If it is no, post comment.
+	// If it is yes, don't say anything.
+	// No pinger logic, just talk during none->no transition, and yes->no transition.
 	return nil
 }
