@@ -28,7 +28,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: hook
-        image: foxish/hook:0.47
+        image: foxish/hook:latest
         imagePullPolicy: Always
         env:
         - name: LINE_IMAGE

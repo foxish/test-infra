@@ -57,8 +57,6 @@ func handle(gc githubClient, log *logrus.Entry, ic github.IssueCommentEvent) err
 	repo := ic.Repo.Name
 	number := ic.Issue.Number
 
-	fmt.Println("##### IN LGTM PLACE!!!!")
-
 	// If we create an "/lgtm" comment, add lgtm if necessary.
 	// If we create a "/lgtm cancel" comment, remove lgtm if necessary.
 	wantLGTM := false
